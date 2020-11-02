@@ -1,6 +1,7 @@
 version: '3.7'
 
 
+
 services:
 
   db:
@@ -13,11 +14,12 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: postgres
+    
 
   redis:
     image: "redis:alpine"
     container_name: br01deloy
-   
+    
     ports:
       - "6379"
     
@@ -25,15 +27,20 @@ services:
   web:
     build:
       context: .
-      dockerfile: compose/Dockerfile
+      dockerfile: Dockerfile
     
     container_name: bs01deloy
+    command: python /src/manage.py runserver 0.0.0.0:8000
     environment:
       - ENVIRONMENT=production
       - SECRET_KEY=jtqgej4gtt$$6+0w8gx8s+zc+6lep$$cz=3^6o+qe32(=sort^6^
       - DEBUG=0
     ports:
       - "8000:8000"
+
+    volumes:
+      - ./src:/src
+
     depends_on:
       - db
     
