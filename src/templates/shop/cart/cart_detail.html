@@ -1,0 +1,270 @@
+{% extends 'shop/base.html' %}
+{% block content %}
+<section class="main-content-section">
+	<div class="container">
+		<div class="row">
+			<div class="col-12">
+				<!-- BSTORE-BREADCRUMB START -->
+				<div class="bstore-breadcrumb">
+					<a href="index.html">HOMe</a>
+					<span><i class="fa fa-caret-right	"></i></span>
+					<span>Your shopping cart</span>
+				</div>
+				<!-- BSTORE-BREADCRUMB END -->
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-12">
+				{% with item_totals=cart|length %}
+				<!-- SHOPPING-CART SUMMARY START -->
+				<h2 class="page-title">Shopping-cart summary <span class="shop-pro-item">Your shopping cart
+						contains: {{item_totals}} products</span></h2>
+				<!-- SHOPPING-CART SUMMARY END -->
+				{% endwith %}
+			</div>
+			<div class="col-12">
+				<!-- SHOPING-CART-MENU START -->
+				<div class="shoping-cart-menu">
+					<ul class="step">
+						<li class="step-current first">
+							<span>01. Summary</span>
+						</li>
+						<li class="step-todo second">
+							<span>02. Sign in</span>
+						</li>
+						<li class="step-todo third">
+							<span>03. Address</span>
+						</li>
+						<li class="step-todo four">
+							<span>04. Shipping</span>
+						</li>
+						<li class="step-todo last" id="step_end">
+							<span>05. Payment</span>
+						</li>
+					</ul>
+				</div>
+				<div class="table-content table-responsive">
+
+					<table class="table table-bordered" id="cart-summary">
+						<thead>
+							<tr>
+								<th class="cart-product">Ảnh sản phẩm</th>
+								<th class="cart-description">Tên sản phẩm</th>
+
+								<th class="cart-unit text-right">giá sản phẩm</th>
+								<th class="cart_quantity text-center">Số lượng</th>
+								<th class="cart-delete">&nbsp;</th>
+								<th class="cart-total text-right">Tổng giá</th>
+							</tr>
+						</thead>
+
+						<tbody>
+						{% for item in cart %}
+						{{item.cart_product}}
+							{% with product=item.cart_product %}
+							<tr>
+
+								<td class="cart-product">
+									<a href="#"><img alt="Blouse"
+													 src="{{product.image.url}}"></a>
+								</td>
+
+								<td class="cart-description">
+									<p class="product-name"><a
+											href="#">{{product.name}}</a></p>
+									{% if item.size and item.color %}
+									<small><a href="#">Size : {{item.size}}, Color : {{item.color}}</a></small>
+									{% elif item.size %}
+									<small><a href="#">Size : {{item.size}}, Color : Hết màu</a></small>
+									{% elif item.color %}
+									<small><a href="#">Size : Hết size, Color : {{item.colorƯ}}</a></small>
+									{% endif %}
+								</td>
+
+								<td class="cart-unit">
+									<ul class="price text-right">
+										<li class="price">{{product.price}}</li>
+									</ul>
+								</td>
+								<td class="cart_quantity text-center">
+									<form
+											action="{% url 'cart:cart_update' product.id %}"
+										  method="post">
+									<div class="cart-plus-minus-button">
+										<input
+												class="cart-plus-minus"
+												type="text" name="qtybutton"
+												value="{{item.quantity}}"></div>
+										<input type="submit" value="sửa">
+										{% csrf_token %}
+									</form>
+								</td>
+								<td class="cart-delete text-center">
+									<span>
+										<a href="#" class="cart_quantity_delete" title="Delete">
+											<form
+													action="{% url 'cart:cart_remove' product.id %}"
+												  method="post">
+											<i class="fa fa-trash-o"></i>
+											<input type="submit" value="Xóa">
+											{% csrf_token %}
+											</form>
+										</a>
+									</span>
+								</td>
+								<td class="cart-total">
+									<span class="price">{{item.total_price}}</span>
+								</td>
+							</tr>
+							{% endwith %}
+						{% endfor %}
+						</tbody>
+
+
+						<!-- TABLE BODY END -->
+						<!-- TABLE FOOTER START -->
+						<tfoot>
+							<tr class="cart-total-price">
+								<td class="text-right" colspan="5">Tổng
+									giá trị đơn hàng</td>
+								<td id="total_product" class="price"
+									colspan="1">{{cart.get_total_price}}</td>
+							</tr>
+							<tr>
+									<td class="text-right" colspan="5">Phí
+									Ship</td>
+									<td id="total_shipping" class="price" colspan="1">{{cart.get_ship|floatformat:3}}</td>
+								</tr>
+								{% if cart.coupon %}
+								<tr>
+									<td class="text-right"
+										colspan="2">"Chương trình -
+										{{cart.coupon.code}}"
+									</td>
+									<td class="text-right" colspan="3">Giảm
+										giá - Khuyến mãi {{cart.coupon.discount}} %
+									</td>
+
+									<td class="price" colspan="1">{{cart.get_discount|floatformat:3}}</td>
+								</tr>
+								{% endif %}
+								<tr>
+									<td
+											class="total-price-container text-right" colspan="5">
+										<span>Tổng phải thanh toán</span>
+									</td>
+									<td id="total-price-container" class="price" colspan="1">
+										<span id="total-price"> {{cart.get_total_price_after_discount|floatformat:3}}
+<!--											{% if cart.coupon %}-->
+<!--											{{cart.get_total_price_after_discount}}-->
+<!--											{% else %}-->
+<!--											{{cart.get_total_price}}-->
+<!--											{% endif %}-->
+										</span>
+									</td>
+								</tr>
+
+						</tfoot>
+						<!-- TABLE FOOTER END -->
+					</table>
+					<form action="{% url 'coupons:coupon_apply' %}"
+						  method="post"
+						  class="coupon-form">
+							<div class="search-product form-group">
+								<input type="text"
+									   class="form-control search-form"
+									   name="coupon"
+									   placeholder="Nhập mã giảm giá">
+								<button class="search-button" value="Search" name="s" type="submit">
+									Nhập
+								</button>
+							</div>
+						{% csrf_token %}
+						</form>
+
+					<!-- TABLE END -->
+				</div>
+				<!-- CART TABLE_BLOCK END -->
+			</div>
+
+			<div class="col-12">
+				<!-- RETURNE-CONTINUE-SHOP START -->
+				<div class="returne-continue-shop">
+					<a href="{% url 'shop:index' %}"
+					   class="continueshoping"><i
+							class="fa fa-chevron-left"></i>Continue
+						shopping</a>
+					<a href="{% url 'orders:order_create' %}"
+					   class="procedtocheckout">Proceed
+						to
+						checkout<i class="fa fa-chevron-right"></i></a>
+				</div>
+				<!-- RETURNE-CONTINUE-SHOP END -->
+			</div>
+		</div>
+		{% if recommended_products %}
+			<div class="row related-products">
+					<div class="col-12">
+						<div class="left-title-area">
+							<h2 class="left-title">related products</h2>
+						</div>
+					</div>
+				{% for p in recommended_products %}
+					<div class="col-xl-3 col-lg-4 col-md-6 col-12">
+						<div class="carousel-wrap">
+							<!-- NEW-PRO-CAROUSEL START -->
+							<div class="new-pro-carousel owl-carousel owl-theme" style="opacity: 1; display: block;">
+								<!-- NEW-PRODUCT-SINGLE-ITEM START -->
+								<div class="owl-wrapper-outer"><div class="owl-wrapper" style="width: 292px; left: 0px; display: block;"><div class="owl-item" style="width: 146px;"><div class="item">
+									<div class="new-product">
+										<div class="single-product-item">
+											<div class="product-image">
+												<a href="{% url 'shop:product_detail' p.id p.slug %}"><img
+														class="product_recommender"
+														src="{{p.image.url}}" alt="product-image"></a>
+												<a href="{% url 'shop:product_detail' p.id p.slug %}" class="new-mark-box">new</a>
+												<div class="overlay-content">
+													<ul>
+														<li><a href="#" title="Quick view"><i class="fa fa-search"></i></a></li>
+														<li><a href="#" title="Quick view"><i class="fa fa-shopping-cart"></i></a></li>
+														<li><a href="#" title="Quick view"><i class="fa fa-retweet"></i></a></li>
+														<li><a href="#" title="Quick view"><i class="fa fa-heart-o"></i></a></li>
+													</ul>
+												</div>
+											</div>
+											<div class="product-info">
+												<div class="customar-comments-box">
+													<div class="rating-box">
+														<i class="fa fa-star"></i>
+														<i class="fa fa-star"></i>
+														<i class="fa fa-star"></i>
+														<i class="fa fa-star-half-empty"></i>
+														<i class="fa fa-star-half-empty"></i>
+													</div>
+													<div class="review-box">
+														<span>1 Review (s)</span>
+													</div>
+												</div>
+												<a href="/shop/1/ao-so-mi-nam">{{p.name}}
+												</a>
+												<div class="price-box">
+													<span class="price">{{p.price}}
+																Đồng</span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div></div></div></div>
+
+							<div class="owl-controls clickable" style="display: none;"><div class="owl-buttons"><div class="owl-prev"><i class="fa fa-angle-left owl-prev-icon"></i></div><div class="owl-next"><i class="fa fa-angle-right owl-next-icon"></i></div></div></div></div>
+							<!-- NEW-PRO-CAROUSEL END -->
+						</div>
+					</div>
+
+				{% endfor %}
+
+				</div>
+			{% endif %}
+	</div>
+</section>
+{% endblock %}

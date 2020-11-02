@@ -1,0 +1,80 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Example 1</title>
+    <link rel="stylesheet" href="{% static 'invoice.css' %}" media="all" />
+  </head>
+  <body>
+    <header class="clearfix">
+      <div id="logo">
+        <img src="{% static 'img/logo.png' %}">
+      </div>
+      <h1>HÓA ĐƠN BÁN HÀNG</h1>
+      <div id="company" class="clearfix">
+        <div>RI'S STORE</div>
+        <div>Ngô Chí Quốc, Phường Tân Hòa<br /> Buôn Ma Thuột, Đăk Lăk</div>
+        <div>0943888843</div>
+        <div><a href="mailto:company@example.com">company@example.com</a></div>
+      </div>
+      <div id="project">
+        <div><span>Số hóa đơn:</span> {{order.id}}</div>
+        <div><span>Tên KH:</span> {{order.first_name}} {{order.last_name}}</div>
+        <div><span>Địa chỉ:</span> {{order.address}}</div>
+        <div><span>Email</span> <a href="{{order.email}}">{{order.email}}</a></div>
+        <div><span>Ngày đặt hàng:</span> {{order.create|date:"d/m/Y" }}</div>
+        <div><span>Ngày cập nhật:</span> {{order.update|date:"d/m/Y"}}</div>
+      </div>
+    </header>
+    <main>
+      <table>
+        <thead>
+          <tr>
+            <th class="service">TÊN HÀNG</th>
+            <th class="desc">GHI CHÚ</th>
+            <th>GIÁ BÁN</th>
+            <th>SL</th>
+            <th>TỔNG</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in order.items.all %}
+          <tr>
+            <td class="service">{{ item.product.name }}</td>
+            <td class="desc"></td>
+            <td class="unit">{{ item.price }}</td>
+            <td class="qty">{{ item.quantity }}</td>
+            <td class="total">{{ item.get_cost }}</td>
+          </tr>
+          {% endfor %}
+
+          <tr>
+            <td colspan="4">Tổng giá sản phẩm</td>
+            <td class="total">{{order.get_total_cost|floatformat:3}}</td>
+          </tr>
+          <tr>
+            <td colspan="4">Giảm giá</td>
+            <td class="total">-{{order.get_discount|floatformat:3}}</td>
+          </tr>
+          <tr>
+            <td colspan="4" >Phí Ship</td>
+            <td class="total">{{order.get_ship|floatformat:3}}</td>
+          </tr>
+          <tr>
+            <td colspan="4" class="grand total">Tổng thanh toán</td>
+            <td class="grand total">{{order.get_total_price_after_discount|floatformat:3}}</td>
+          </tr>
+        </tbody>
+      </table>
+      <div id="notices">
+        <div>NOTICE:</div>
+        <div class="notice">A finance charge of 1.5% will be made on unpaid balances after 30 days.</div>
+      </div>
+    </main>
+    <footer>
+      Invoice was created on a computer and is valid without the signature and seal.
+    </footer>
+  </body>
+</html>

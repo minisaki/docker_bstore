@@ -1,0 +1,130 @@
+{% extends 'shop/base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+
+
+<!-- TOW-COLUMN-PRODUCT START -->
+<div class="row tow-column-product">
+	<div class="col-md-12 col-12">
+		<!-- NEW-PRODUCT-AREA START -->
+		<div class="new-product-area">
+			<div class="left-title-area">
+				<h2 class="left-title">Sản phẩm hiện có</h2>
+			</div>
+			<div class="row" id="product_list">
+				{% include "shop/main_content_ajax.html" %}
+			</div>
+		</div>
+		<!-- NEW-PRODUCT-AREA END -->
+	</div>
+
+</div>
+
+{% with page=products page_nums=products.paginator.page_range %}
+<div class="product-shooting-result">
+	<form action="#">
+		<button class="btn compare-button">
+			Compare (<span class="compare-value">1</span>)
+			<i class="fa fa-chevron-right"></i>
+		</button>
+	</form>
+	<div class="showing-item">
+		<span >
+            Page {{ page.number }} of {{ page.paginator.num_pages }}.
+        </span>
+	</div>
+	<div class="showing-next-prev">
+		<ul class="pagination-bar">
+			<li class="disabled">
+				{% if page.has_previous %}
+				<a href="?page_number={{ page.previous_page_number }}"><i class="fa fa-chevron-left"></i>Previous</a>
+				{% endif %}
+			</li>
+
+			{% for page_num in page_nums %}
+			<li class="active">
+				<span><a class="pagi-num" href="?page_number={{ page_num }}">{{page_num}}</a></span>
+			</li>
+
+			{% endfor %}
+			<li>
+				{% if page.has_next %}
+				<a href="?page_number={{ page.next_page_number }}">Next<i class="fa fa-chevron-right"></i></a>
+				{% endif %}
+			</li>
+		</ul>
+		<form action="#">
+			<button class="btn showall-button">Show all</button>
+		</form>
+	</div>
+</div>
+{% endwith %}
+{% endblock %}
+
+{% block domready %}
+	$(".userlike").click(function(e){
+	e.preventDefault();
+	var id = $(this).data('id')
+	$.post('{% url 'shop:index' %}', {id1: id, action1: $(this).data('action')}, function(data){
+			console.log(data['status']);
+			if (data['status'] == 'ok') {
+				var previous_action = $('#'+ id + 'like').data('action');
+				console.log(previous_action);
+<!--				console.log(id);-->
+				var total_likes = parseInt($('#'+id).text());
+				console.log(total_likes + "lay dc");
+
+
+<!--				if (previous_action == 'like') {-->
+				$('#'+ id + 'like').data('action', previous_action == 'like' ? 'unlike' : 'like')
+				$('i#like').removeClass(previous_action == 'like' ? 'like' : "")
+<!--				$('.like').css("color", previous_action == 'like' ? '' : '#32ab1e');-->
+
+
+				total_likes = previous_action == 'like' ? total_likes+1 : total_likes-1
+				console.log(total_likes + "tinh toan")
+				$('#'+id).text(total_likes)
+<!--				}else {-->
+<!--					$('a.userlike').data('action', 'like')-->
+<!--					$('i#like').addClass('like')-->
+<!--					total_likes = total_likes-1-->
+<!--&lt;!&ndash;					console.log(total_likes)&ndash;&gt;-->
+<!--					$('#'+id).text(total_likes)-->
+<!--				}-->
+
+			}else{ console.log("loi do be")}
+		});
+	});
+
+	var page = 1;
+	var empty_page = false;
+	var block_request = false;
+
+	$(window).scroll(function() {
+		console.log($(document).height());
+		console.log($(window).height());
+		var margin = $(document).height() - $(window).height();
+		console.log(margin);
+		console.log($(window).scrollTop());
+		if ($(window).scrollTop() >= margin && empty_page == false && block_request == false) {
+			block_request = true;
+			page +=1;
+			console.log(page);
+			$.get('?page_number=' + page, function(data) {
+				console.log(data);
+				if (data == '') {
+					empty_page = true;
+				}
+				else {
+					block_request = false;
+					$('#product_list').append(data);
+				}
+			});
+		}
+	});
+
+{% endblock %}
+

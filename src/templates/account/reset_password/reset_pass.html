@@ -1,0 +1,46 @@
+{% extends 'shop/base.html' %}
+
+{% block content %}
+			<div class="row">
+				<div class="col-12">
+					<!-- BSTORE-BREADCRUMB START -->
+					<div class="bstore-breadcrumb">
+						<a href="index.html">HOMe</a>
+						<span><i class="fa fa-caret-right"></i></span>
+						<span>Quên mật khẩu</span>
+					</div>
+					<!-- BSTORE-BREADCRUMB END -->
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-12">
+					<h2 class="page-title">Khôi phục mật khẩu</h2>
+				</div>
+				<div class="col-md-6 col-12">
+					<!-- CREATE-NEW-ACCOUNT START -->
+					<div class="create-new-account">
+						<form class="new-account-box primari-box" id="create-new-account" method="post" action="#">
+							{% csrf_token %}
+							<h3 class="box-subheading">Tạo mật khẩu mới</h3>
+							<div class="form-content">
+								<p>Please enter your email address to create an account.</p>
+								<div class="form-group primary-form-group">
+									<label for="email">Email đăng kí tài khoản</label>
+									<input type="text" value="" name="email" id="email" class="form-control input-feild" required="">
+								</div>
+								<div class="submit-button">
+									<a href="checkout-registration.html" id="SubmitCreate" class="btn main-btn">
+										<span>
+											<i class="fa fa-user submit-icon"></i>
+											<input style="outline: none;" type="submit" value="Khôi phục">
+										</span>
+									</a>
+								</div>
+							</div>
+						</form>
+					</div>
+					<!-- CREATE-NEW-ACCOUNT END -->
+				</div>
+
+			</div>
+{% endblock %}

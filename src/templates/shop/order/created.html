@@ -1,0 +1,94 @@
+{% extends 'shop/base.html' %}
+{% block content %}
+<div class="container">
+		<div class="row">
+			<div class="col-12">
+				<!-- BSTORE-BREADCRUMB START -->
+				<div class="bstore-breadcrumb">
+					<a href="index.html">HOMe</a>
+					<span><i class="fa fa-caret-right	"></i></span>
+					<span>Authentication</span>
+				</div>
+				<!-- BSTORE-BREADCRUMB END -->
+			</div>
+		</div>
+		<div class="row">
+			{% with len=cart|length %}
+			{% if not len %}
+			<div class="col-12">
+				<h2 class="page-title">{{message}}
+					{{order.get_total_price_after_discount}}</h2>
+			</div>
+			{% endif %}
+			{% endwith %}
+			<div class="col-12">
+				<!-- PERSONAL-INFOMATION START -->
+				<div class="personal-infomation">
+					<form class="primari-box personal-info-box"
+						  id="personalinfo" method="post"
+						  action="{% url 'orders:order_create' %}">
+						<h3 class="box-subheading">Thông Tin Giao Hàng</h3>
+						<div class="personal-info-content">
+							<div class="form-group primary-form-group p-info-group">
+								<label>Giới tính</label>
+								<span class="radio-box">
+									<input id="radio1" type="radio" name="gender" value="1" checked="checked">
+									<label for="radio1">Nam</label>
+								</span>
+								<span class="radio-box">
+									<input id="radio2" type="radio"
+										   name="gender" value="0">
+
+									<label for="radio2">Nữ</label>
+								</span>
+							</div>
+							<div class="form-group primary-form-group p-info-group">
+								<label for="firstname">Họ
+									<sup>*</sup></label>
+								<input type="text" value="" name="firstname" id="firstname" class="form-control input-feild">
+							</div>
+							<div class="form-group primary-form-group p-info-group">
+								<label for="lastname">Tên
+									<sup>*</sup></label>
+								<input type="text" value="" name="lastname" id="lastname" class="form-control input-feild">
+							</div>
+							<div class="form-group primary-form-group p-info-group">
+								<label for="email">Email<sup>*</sup></label>
+								<input type="email" value="" name="email" id="email" class="form-control input-feild">
+							</div>
+							<div class="form-group primary-form-group p-info-group">
+								<label for="lastname">Địa Chỉ <sup>*
+								</sup></label>
+								<input type="text" value="" name="address" id="address" class="form-control input-feild">
+							</div>
+							<div class="form-group primary-form-group p-info-group">
+								<label for="lastname">Số Điện Thoại
+									<sup>*</sup></label>
+								<input type="text" value="" name="phone" id="phone" class="form-control input-feild">
+							</div>
+							<div class="form-group primary-form-group p-info-group">
+								<label for="lastname">Mã giảm giá</label>
+								<input type="text" value="" name="postal_code" id="postal_code" class="form-control input-feild">
+							</div>
+
+							<div class="submit-button p-info-submit-button">
+								<a id="SubmitCreate"
+								   class="btn main-btn">
+									<span>
+										<input type="submit" value="Đặt Hàng">
+										<i class="fa fa-chevron-right"></i>
+									</span>
+								</a>
+								<span class="required-field"><sup>*
+								</sup>Bắt buộc điền trường này</span>
+							</div>
+						</div>
+						{% csrf_token %}
+					</form>
+
+				</div>
+				<!-- PERSONAL-INFOMATION END -->
+			</div>
+		</div>
+	</div>
+{% endblock %}

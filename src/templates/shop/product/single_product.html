@@ -1,0 +1,228 @@
+{% extends 'shop/base.html' %}
+{% block content %}
+<div class="row">
+
+	<div class="col-md-9 col-12">
+		<!-- SINGLE-PRODUCT-DESCRIPTION START -->
+		<div class="row">
+			<div class="col-lg-5 col-md-4 col-12">
+				<div class="single-product-view">
+					<!-- Tab panes -->
+					<div class="tab-content">
+						<div class="tab-pane active" id="thumbnail_1">
+							<div class="single-product-image">
+								<img src="{{product_detail.image.url}}"
+									 alt="single-product-image">
+								<a class="new-mark-box" href="#">new</a>
+								<a class="fancybox" href="{{product_detail.image.url}}" data-fancybox-group="gallery"><span class="btn large-btn">View larger <i class="fa fa-search-plus"></i></span></a>
+							</div>
+						</div>
+						<div class="tab-pane" id="thumbnail_2">
+							<div class="single-product-image">
+								<img src="{{product_detail.image.url}}" alt="single-product-image">
+								<a class="new-mark-box" href="#">new</a>
+								<a class="fancybox" href="{{product_detail.image.url}}" data-fancybox-group="gallery"><span class="btn large-btn">View larger <i class="fa fa-search-plus"></i></span></a>
+							</div>
+						</div>
+						<div class="tab-pane" id="thumbnail_3">
+							<div class="single-product-image">
+								<img src="{{product_detail.image.url}}" alt="single-product-image">
+								<a class="new-mark-box" href="#">new</a>
+								<a class="fancybox" href="{{product_detail.image.url}}" data-fancybox-group="gallery"><span class="btn large-btn">View larger <i class="fa fa-search-plus"></i></span></a>
+							</div>
+						</div>
+
+					</div>
+				</div>
+				<div class="select-product">
+					<!-- Nav tabs -->
+					<div class="bx-wrapper" style="max-width: 264px;"><div class="bx-viewport" style="width: 100%; overflow: hidden; position: relative; height: 80px;">
+						<ul class="nav nav-tabs select-product-tab bxslider" style="width: 815%; position: relative; transition-duration: 0s; transform: translate3d(-264px, 0px, 0px);">
+
+						<li style="float: left; list-style: none; position: relative; width: 88px;">
+							<a href="#thumbnail_1" data-toggle="tab"><img
+									src="{{product_detail.image.url}}" alt="pro-thumbnail"></a>
+						</li>
+						<li style="float: left; list-style: none; position: relative; width: 88px;">
+							<a href="#thumbnail_2" data-toggle="tab"><img
+									src="{{product_detail.image.url}}" alt="pro-thumbnail"></a>
+						</li>
+						<li style="float: left; list-style: none; position: relative; width: 88px;">
+							<a href="#thumbnail_3" data-toggle="tab"><img
+									src="{{product_detail.image.url}}" alt="pro-thumbnail"></a>
+						</li>
+
+						</li></ul>
+					</div>
+						<div class="bx-controls bx-has-pager bx-has-controls-direction"><div class="bx-pager bx-default-pager"><div class="bx-pager-item"><a href="" data-slide-index="0" class="bx-pager-link active">1</a></div><div class="bx-pager-item"><a href="" data-slide-index="1" class="bx-pager-link">2</a></div></div><div class="bx-controls-direction"><a class="bx-prev" href=""><i class="fa fa-angle-right"></i></a><a class="bx-next" href=""><i class="fa fa-angle-left"></i></a></div></div></div>
+				</div>
+			</div>
+			<div class="col-lg-7 col-md-8 col-12">
+				<div class="bstore-breadcrumb">
+                <a href="/shop/">HOMe</a>
+                <span><i class="fa fa-caret-right"></i></span>
+					<span>{{category.name}}</span>
+
+
+				<span><i class="fa fa-caret-right"></i></span><span>{{product_detail}}</span>
+            </div>
+				<div class="single-product-descirption">
+					<h2>{{product_detail}}</h2>
+					<span>{{total_view}} Review{{total_view|pluralize}}</span>
+					<div class="single-product-price">
+						<h2>{{product_detail.price}} đồng</h2>
+					</div>
+					<form
+							action="{% url 'cart:cart_add' product_detail.id %}"
+						  method="post">
+						<div class="single-product-desc">
+							<div class="product-in-stock">
+								{% if product_detail.quality > 0 %}
+								<p> <span>{{product_detail.quality}} sản phẩm trong kho</span></p>
+								{% else %}
+								<p> <span>Hết hàng</span></p>
+								{% endif %}
+							</div>
+						</div>
+
+
+						<div class="single-product-quantity">
+							<p class="small-title">Số Lượng</p>
+							{% if product_detail.quality > 0 %}
+							<div class="cart-quantity">
+								<div class="cart-plus-minus-button single-qty-btn">
+									<input class="cart-plus-minus sing-pro-qty" type="text" name="qtybutton" value="0">
+								</div>
+							</div>
+							{% else %}
+									<input class="cart-plus-minus sing-pro-qty" type="text" name="qtybutton" value="0" disabled>
+							{% endif %}
+						</div>
+						<div class="single-product-size">
+							<p class="small-title">Chọn Size </p>
+							{% if product_detail.quality > 0 %}
+							<select name="product-size" id="product-size">
+								{% if product_detail.size_split != "" %}
+								{% for size in product_detail.size_split %}
+
+									<option value="{{size}}">{{size}}</option>
+								{% endfor %}
+								{% else %}
+									<option value="">Hết size</option>
+								{% endif %}
+
+<!--								<option value="">L</option>-->
+							</select>
+							{% else %}
+									<select disabled></select>
+							{% endif %}
+						</div>
+						<div class="single-product-size">
+							<p class="small-title">Chọn màu </p>
+							{% if product_detail.quality > 0 %}
+							<select name="product-color" id="product-color">
+
+									{% if product_detail.color_split != "" %}
+									{% for color in product_detail.color_split %}
+
+										<option value="{{color}}">{{color}}</option>
+									{% endfor %}
+									{% else %}
+										<option value="">Hết Màu</option>
+									{% endif %}
+
+
+<!--								<option value="">L</option>-->
+							</select>
+							{% else %}
+									<select disabled></select>
+							{% endif %}
+							<a href="#"><span></span></a>
+							<a class="color-blue" href="#"><span></span></a>
+						</div>
+						<div class="single-product-add-cart">
+							<a class="add-cart-text" title="Add to cart"
+							   href="#">
+								{% if product_detail.quality > 0 %}
+								<input type="submit" value="Thêm vào giỏ hàng">
+								{% else %}
+								<input type="submit" value="Thêm vào giỏ hàng" disabled>
+								{% endif %}
+								</a>
+						</div>
+						{% csrf_token %}
+
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>
+{% if recommended_products %}
+<div class="row related-products">
+		<div class="col-12">
+			<div class="left-title-area">
+				<h2 class="left-title">related products</h2>
+			</div>
+		</div>
+	{% for p in recommended_products %}
+		<div class="col-xl-3 col-lg-4 col-md-6 col-12">
+			<div class="carousel-wrap">
+				<!-- NEW-PRO-CAROUSEL START -->
+				<div class="new-pro-carousel owl-carousel owl-theme" style="opacity: 1; display: block;">
+					<!-- NEW-PRODUCT-SINGLE-ITEM START -->
+					<div class="owl-wrapper-outer"><div class="owl-wrapper" style="width: 292px; left: 0px; display: block;"><div class="owl-item" style="width: 146px;"><div class="item">
+						<div class="new-product">
+							<div class="single-product-item">
+								<div class="product-image">
+									<a href="{% url 'shop:product_detail' p.id p.slug %}"><img
+											class="product_recommender"
+											src="{{p.image.url}}" alt="product-image"></a>
+									<a href="{% url 'shop:product_detail' p.id p.slug %}" class="new-mark-box">new</a>
+									<div class="overlay-content">
+										<ul>
+											<li><a href="#" title="Quick view"><i class="fa fa-search"></i></a></li>
+											<li><a href="#" title="Quick view"><i class="fa fa-shopping-cart"></i></a></li>
+											<li><a href="#" title="Quick view"><i class="fa fa-retweet"></i></a></li>
+											<li><a href="#" title="Quick view"><i class="fa fa-heart-o"></i></a></li>
+										</ul>
+									</div>
+								</div>
+								<div class="product-info">
+									<div class="customar-comments-box">
+										<div class="rating-box">
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star"></i>
+											<i class="fa fa-star-half-empty"></i>
+											<i class="fa fa-star-hapty"></i>
+										</div>
+										<div class="review-box">
+											<span>{{total_view}} Review{{total_view|pluralize}}</span>
+										</div>
+									</div>
+									<a href="{% url 'shop:product_detail' p.id p.slug %}">{{p.name}}
+									</a>
+									<div class="price-box">
+										<span class="price">{{p.price}}
+													Đồng</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div></div></div></div>
+
+				<div class="owl-controls clickable" style="display: none;"><div class="owl-buttons"><div class="owl-prev"><i class="fa fa-angle-left owl-prev-icon"></i></div><div class="owl-next"><i class="fa fa-angle-right owl-next-icon"></i></div></div></div></div>
+				<!-- NEW-PRO-CAROUSEL END -->
+			</div>
+		</div>
+
+	{% endfor %}
+
+	</div>
+{% endif %}
+{% endblock %}
+
+
+
