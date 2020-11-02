@@ -186,7 +186,7 @@ AUTHENTICATION_BACKENDS = [
 #deloy
 
 ENVIRONMENT = os.environ.get('ENVIRONMENT', default='development')
-SECRET_KEY = os.environ.get('SECRET_KEY')
+# SECRET_KEY = os.environ.get('SECRET_KEY')
 DEBUG = int(os.environ.get('DEBUG', default=0))
 
 if ENVIRONMENT == 'production':

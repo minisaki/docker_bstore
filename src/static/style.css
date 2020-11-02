@@ -3680,7 +3680,7 @@ ul.step li.step-done span a{
 	width: 130px;
 }
 #cart-summary tbody td.cart-description {
-	min-width: 340px;
+	min-width: 150px;
 }
 #cart-summary tbody td.cart-unit {
 	width:12.2%;
