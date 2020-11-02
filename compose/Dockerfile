@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y gettext libgettextpo-dev zlib1g libjpeg
 
 RUN pip install --upgrade pip
 
-COPY src/requirements.txt /scripts/
+COPY ./requirements.txt /scripts/
 RUN pip install --no-cache-dir -r /scripts/requirements.txt
 
-COPY /src/ /src/
+CMD ["sh", "-c", "python manage.py collectstatic --no-input; python manage.py migrate; python manage.py runserver 0.0.0.0:8000"]
