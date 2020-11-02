@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y gettext libgettextpo-dev zlib1g libjpeg
 
 RUN pip install --upgrade pip
 
-COPY /requirements.txt /scripts/
+COPY src/requirements.txt /scripts/
 RUN pip install --no-cache-dir -r /scripts/requirements.txt
 
 COPY /src/ /src/
