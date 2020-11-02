@@ -4,12 +4,10 @@ setup:
 
 build:
   docker:
-    web: Dockerfile
+    web: compose/Dockerfile
 
 release:
   image: web
-  command:
-    - python manage.py collectstatic --noinput
 
 run:
-  web: gunicorn bookstore_project.wsgi
+  web: gunicorn myshop.wsgi
