@@ -25,7 +25,7 @@ SECRET_KEY = 'jtqgej4gtt$6+0w8gx8s+zc+6lep$cz=3^6o+qe32(=sort^6^'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['.herokuapp.com', '0.0.0.0', '127.0.0.1', 'localhost',]
+ALLOWED_HOSTS = ['tranquil-spire-42808.herokuapp.com', '0.0.0.0', '127.0.0.1', 'localhost',]
 
 
 # Application definition

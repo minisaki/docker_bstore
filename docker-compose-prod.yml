@@ -30,7 +30,7 @@ services:
       dockerfile: Dockerfile
     
     container_name: bs01deloy
-    command: python /src/manage.py runserver 0.0.0.0:8000
+    command: python src/manage.py runserver 0.0.0.0:8000
     environment:
       - ENVIRONMENT=production
       - SECRET_KEY=jtqgej4gtt$$6+0w8gx8s+zc+6lep$$cz=3^6o+qe32(=sort^6^
