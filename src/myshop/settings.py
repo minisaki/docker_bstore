@@ -22,10 +22,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'jtqgej4gtt$6+0w8gx8s+zc+6lep$cz=3^6o+qe32(=sort^6^'
 
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['tranquil-spire-42808.herokuapp.com', '0.0.0.0', '127.0.0.1', 'localhost',]
+ALLOWED_HOSTS = ['tranquil-spire-42808.herokuapp.com', '0.0.0.0', '127.0.0.1', 'localhost','enigmatic-scrubland-66968.herokuapp.com']
 
 
 # Application definition
